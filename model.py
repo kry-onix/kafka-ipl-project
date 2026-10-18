@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
+import joblib
 
 # IPL MATCH DATA 
 #[Runs, Wickets, Overs, RunRate, Wickets Remaining]
@@ -55,4 +56,5 @@ model = LinearRegression()
 model.fit(x_train, y_train)
 
 y_pred = model.predict(x_test)
-print(f"Accuracy: {r2_score(y_test, y_pred)*100:.2f} %")
+print("R2 Score: ", r2_score(y_test, y_pred))
+joblib.dump(model, "model.pkl")

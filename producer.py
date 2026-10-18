@@ -1,48 +1,23 @@
 from kafka import KafkaProducer
-import json 
-# import time
+import json, time, random
 
 producer = KafkaProducer(
-    bootstrap_servers = "localhost:9092",
-        value_serializer = lambda v:
-    json.dumps(v).encode("utf-8")
-)
-# matches = [
-#     {
-#         "team1": "CSK",
-#         "team2": "MI",
-#         "runs": 180,
-#         "wickets": 5,
-#         "overs": 20
-#     },
-#     {
-#         "team1": "RCB",
-#         "team2": "KKR",
-#         "runs": 165,
-#         "wickets": 7,
-#         "overs": 20
-#     },
-#     {
-#         "team1": "MI",
-#         "team2": "DC",
-#         "runs": 195,
-#         "wickets": 4,
-#         "overs": 20
-#     }
-# ]
-# for match in matches:
-#     producer.send("ipl-matches",
-# value=match)
-#     print("sent:", match)
-#     time.sleep(2)
-# producer.flush()
-# producer.close()    
+	bootstrap_servers="localhost:9092",
+	value_serializer=lambda v:
+	json.dumps(v).encode("utf-8"))
 
-data = {
-    "runs":100,
-    "wickets": 2,
-    "overs": 12
-}
-producer.send("ipl-matches", value=data)
+runs = wickets = 0
+for ball in range(1,121):
+	runs += random.choice([0, 1, 1, 2, 4, 6])
+	if random.random() < 0.05 and wickets < 10:
+		wickets += 1
+	data = {"runs": runs,
+		"wickets": wickets,
+		"overs": ball / 6}
+	producer.send("ipl-matches", value=data)
+	print("sent:", data)
+	time.sleep(1)
+	if  wickets == 10:
+		break
 producer.flush()
-print("IPL data sent:", data)
+

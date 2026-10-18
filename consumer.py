@@ -1,8 +1,9 @@
 from kafka import KafkaConsumer
 import json
-import numpy as np 
-from model import model
+import numpy as np
+import joblib
 
+model = joblib.load("model.pkl")
 consumer = KafkaConsumer(
     "ipl-matches",
 bootstrap_servers="localhost:9092",
